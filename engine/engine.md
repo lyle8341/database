@@ -1,0 +1,1 @@
+>Mysql在V5.1之前默认存储引擎是MyISAM；在此之后默认存储引擎是InnoDB
