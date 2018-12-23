@@ -1,6 +1,14 @@
 # databases
 
++ 查看mysql的datadir
+  + mysql> show variables like 'datadir';
 
+
+https://www.cnblogs.com/liujiacai/p/7753324.html
+
+
+  
+  
 段落的前后要有空行，所谓的空行是指没有文字内容。若想在段内强制换行的方式是使用**两个以上**空格加上回车（引用中换行省略回车）。
 
 
