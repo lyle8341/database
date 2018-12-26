@@ -3,6 +3,9 @@
 + 查看mysql的datadir
   + mysql> show variables like 'datadir';
 
++ mysql console清屏
+  + mysql> system clear
+
 
 https://www.cnblogs.com/liujiacai/p/7753324.html
 
