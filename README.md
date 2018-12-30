@@ -1,5 +1,14 @@
 # databases
 
+<a href="#one">one</a>  
+<a href="#two">two</a>  
+<a href="#three">three </a>
+
+
+
+<a name="one">one</a>
+
+
 + 查看mysql的datadir
   + mysql> show variables like 'datadir';
 
@@ -55,6 +64,8 @@ https://www.cnblogs.com/liujiacai/p/7753324.html
 
 分割线
 ***
+
+<a name="two">two</a>
 
 分割线
 ---
