@@ -76,11 +76,11 @@ https://www.cnblogs.com/liujiacai/p/7753324.html
 ![not null default](/img/not-null-default.png)
 ```sql
 mysql> insert into lyle(sex)values('男');
-ERROR 1364 (HY000): Field 'name' doesn't have a default value
+#ERROR 1364 (HY000): Field 'name' doesn't have a default value
 mysql> insert into lyle(name)values('gg');
-Query OK, 1 row affected (0.29 sec)
+#Query OK, 1 row affected (0.29 sec)
 mysql> insert into lyle(name,sex)values('ggg',null);
-ERROR 1048 (23000): Column 'sex' cannot be null
+--ERROR 1048 (23000): Column 'sex' cannot be null
 ```
 
 
