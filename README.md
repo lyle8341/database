@@ -1,5 +1,11 @@
 # databases
 
+* 本工程软件版本
+
+|  mysql  |  redis  |  mongo  |
+|:-------:|:-------:|:-------:|
+|  8.0.13 |         |         |
+
 ><a href="#one">one</a>  
 <a href="#not_null_default">not_null_default</a>  
 <a href="#three">three </a>
@@ -66,6 +72,16 @@ https://www.cnblogs.com/liujiacai/p/7753324.html
 ***
 
 ><a name="not_null_default">not_null_default</a>
+![not null default](/img/not-null-default.png)
+```sql
+mysql> insert into lyle(sex)values('男');
+ERROR 1364 (HY000): Field 'name' doesn't have a default value
+mysql> insert into lyle(name)values('gg');
+Query OK, 1 row affected (0.29 sec)
+mysql> insert into lyle(name,sex)values('ggg',null);
+ERROR 1048 (23000): Column 'sex' cannot be null
+```
+
 
 分割线
 ---
