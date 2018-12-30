@@ -6,15 +6,11 @@
 |:-------:|:-------:|:-------:|
 |  8.0.13 |         |         |
 
-><a href="#one">one</a>  
+><a href="#variables">variables</a>  
 <a href="#not_null_default">not_null_default</a>  
 <a href="#three">three </a>
 
-
-
-<a name="one">one</a>
-
-
+<a name="variables">variables</a>
 + 查看mysql的datadir
   + mysql> show variables like 'datadir';
 
@@ -80,7 +76,7 @@ mysql> insert into lyle(sex)values('男');
 mysql> insert into lyle(name)values('gg');
 #Query OK, 1 row affected (0.29 sec)
 mysql> insert into lyle(name,sex)values('ggg',null);
---ERROR 1048 (23000): Column 'sex' cannot be null
+#ERROR 1048 (23000): Column 'sex' cannot be null
 ```
 
 
@@ -92,11 +88,4 @@ mysql> insert into lyle(name,sex)values('ggg',null);
 ___
 分割线
 
-
-用`|`表示表格纵向边界，表头和表内容用`-`隔开，并可用`:`进行对齐设置，两边都有`:`则表示居中，若不加`:`则默认左对齐
-
-|代码库                              |链接                                |
-|--------------------------------|------------------------------------|
-|MarkDown                              |[https://www.baidu.com](https://www.baidu.com "baidu")|
-|MarkDown                              |[https://www.baidu.com](https://www.baidu.com "baidu")|
 
