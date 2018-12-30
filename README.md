@@ -72,6 +72,7 @@ https://www.cnblogs.com/liujiacai/p/7753324.html
 ***
 
 ><a name="not_null_default">not_null_default</a>
+
 ![not null default](/img/not-null-default.png)
 ```sql
 mysql> insert into lyle(sex)values('男');
