@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 测试,CountDownLatch目的是测试完成回复count的值
+ * 测试,CountDownLatch目的是测试完成恢复count的值
  *
  * @author Lyle
  * @version v1.0
@@ -48,7 +48,7 @@ public class TestController {
     for (int i = 0; i < 100; i++) {
       new Thread(() -> {
         Pair<Boolean, String> result = RedisLock.lockedWork(
-            new RedisLock(stringRedisTemplate, "lockKey"),
+            new RedisLock(stringRedisTemplate, "lockKey"),2,100,
             () -> {
               // 锁内程序
               return "我是锁内程序执行结果:" + count--;

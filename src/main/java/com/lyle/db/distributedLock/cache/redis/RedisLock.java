@@ -32,9 +32,9 @@ public class RedisLock {
    */
   private int lockExpire = 30;
   /**
-   * 每次请求失败休眠时间（毫秒）
+   * 每次请求失败至少休眠时间（毫秒）
    */
-  private int sleepMillis = 100;
+  private int sleepMillis = 10;
 
   /**
    * @param redisTemplate Redis管理模板
@@ -145,11 +145,11 @@ public class RedisLock {
       try {
         Boolean aBoolean = ops.setIfAbsent(LOCKED);
         if (null != aBoolean && aBoolean) {
-          this.redisTemplate.expire(key, expire, TimeUnit.MILLISECONDS);
+          ops.expire(expire,TimeUnit.MILLISECONDS);
           this.isLocked = true;
           break;
         } else if (null != ops.getExpire() && ops.getExpire() == -1L) {
-          this.redisTemplate.expire(key, expire, TimeUnit.MILLISECONDS);
+          ops.expire(expire,TimeUnit.MILLISECONDS);
           LOG.error("检测到已存在的锁未设置失效时间，为其设置失效时间，key：" + key);
         }
         if (currSleepMillis > maxSleepTimeMillis) {
