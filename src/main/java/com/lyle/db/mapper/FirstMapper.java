@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Select;
 /**
  * @author Lyle
  * @version v1.0
- * @date 2019-01-14 下午10:52
  * @since 1.8
  */
 public interface FirstMapper {
