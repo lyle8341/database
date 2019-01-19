@@ -1,0 +1,151 @@
+mysql> show engine innodb status\G
+*************************** 1. row ***************************
+  Type: InnoDB
+  Name:
+Status:
+=====================================
+2019-01-18 10:00:58 0x7fdb73aae700 INNODB MONITOR OUTPUT
+=====================================
+Per second averages calculated from the last 16 seconds
+-----------------
+BACKGROUND THREAD
+-----------------
+srv_master_thread loops: 232 srv_active, 0 srv_shutdown, 11926 srv_idle
+srv_master_thread log flush and writes: 0
+----------
+SEMAPHORES
+----------
+OS WAIT ARRAY INFO: reservation count 8482 //表示innodb产生了多少次os wait
+OS WAIT ARRAY INFO: signal count 3793
+RW-shared spins 4184, rounds 5148, OS waits 997
+RW-excl spins 1141, rounds 19808, OS waits 287
+RW-sx spins 0, rounds 0, OS waits 0
+Spin rounds per wait: 1.23 RW-shared, 17.36 RW-excl, 0.00 RW-sx
+------------------------
+LATEST DETECTED DEADLOCK
+------------------------
+2019-01-18 09:46:59 0x7fdb73aae700
+*** (1) TRANSACTION:
+TRANSACTION 112397, ACTIVE 22 sec inserting
+mysql tables in use 1, locked 1
+LOCK WAIT 4 lock struct(s), heap size 1136, 2 row lock(s)
+MySQL thread id 393, OS thread handle 140580582213376, query id 55427 localhost root update
+insert into mysql_pk_lock value("lyle",1,"",123456)
+*** (1) WAITING FOR THIS LOCK TO BE GRANTED:
+RECORD LOCKS space id 452 page no 4 n bits 72 index PRIMARY of table `databases`.`mysql_pk_lock` trx id 112397 lock_mode X insert intention waiting
+Record lock, heap no 1 PHYSICAL RECORD: n_fields 1; compact format; info bits 0
+ 0: len 8; hex 73757072656d756d; asc supremum;;
+===============
+// 以上表示死锁发生时事务1等待的锁，事务想获得mysql_pk_lock表的PRIMARY索引对应的X排他锁(Innodb的锁是与索引相关)
+===============
+
+*** (2) TRANSACTION:
+TRANSACTION 112398, ACTIVE 10 sec inserting
+mysql tables in use 1, locked 1
+4 lock struct(s), heap size 1136, 2 row lock(s)
+MySQL thread id 394, OS thread handle 140580515145472, query id 55444 localhost root update
+insert into mysql_pk_lock value("lyle",1,"",123456)
+*** (2) HOLDS THE LOCK(S):
+RECORD LOCKS space id 452 page no 4 n bits 72 index PRIMARY of table `databases`.`mysql_pk_lock` trx id 112398 lock mode S
+Record lock, heap no 1 PHYSICAL RECORD: n_fields 1; compact format; info bits 0
+ 0: len 8; hex 73757072656d756d; asc supremum;;
+
+*** (2) WAITING FOR THIS LOCK TO BE GRANTED:
+RECORD LOCKS space id 452 page no 4 n bits 72 index PRIMARY of table `databases`.`mysql_pk_lock` trx id 112398 lock_mode X insert intention waiting
+Record lock, heap no 1 PHYSICAL RECORD: n_fields 1; compact format; info bits 0
+ 0: len 8; hex 73757072656d756d; asc supremum;;
+
+*** WE ROLL BACK TRANSACTION (2)
+------------
+TRANSACTIONS
+------------
+Trx id counter 112399
+Purge done for trx's n:o < 112397 undo n:o < 0 state: running but idle
+History list length 25
+LIST OF TRANSACTIONS FOR EACH SESSION:
+---TRANSACTION 422056193169760, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+---TRANSACTION 422056193168832, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+---TRANSACTION 422056193167904, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+--------
+FILE I/O
+--------
+I/O thread 0 state: waiting for completed aio requests (insert buffer thread)
+I/O thread 1 state: waiting for completed aio requests (log thread)
+I/O thread 2 state: waiting for completed aio requests (read thread)
+I/O thread 3 state: waiting for completed aio requests (read thread)
+I/O thread 4 state: waiting for completed aio requests (read thread)
+I/O thread 5 state: waiting for completed aio requests (read thread)
+I/O thread 6 state: waiting for completed aio requests (write thread)
+I/O thread 7 state: waiting for completed aio requests (write thread)
+I/O thread 8 state: waiting for completed aio requests (write thread)
+I/O thread 9 state: waiting for completed aio requests (write thread)
+Pending normal aio reads: [0, 0, 0, 0] , aio writes: [0, 0, 0, 0] ,
+ ibuf aio reads:, log i/o's:, sync i/o's:
+Pending flushes (fsync) log: 0; buffer pool: 0
+1156 OS file reads, 2458 OS file writes, 1064 OS fsyncs
+0.00 reads/s, 0 avg bytes/read, 0.00 writes/s, 0.00 fsyncs/s
+-------------------------------------
+INSERT BUFFER AND ADAPTIVE HASH INDEX
+-------------------------------------
+Ibuf: size 1, free list len 0, seg size 2, 0 merges
+merged operations:
+ insert 0, delete mark 0, delete 0
+discarded operations:
+ insert 0, delete mark 0, delete 0
+Hash table size 34679, node heap has 0 buffer(s)
+Hash table size 34679, node heap has 2 buffer(s)
+Hash table size 34679, node heap has 3 buffer(s)
+Hash table size 34679, node heap has 0 buffer(s)
+Hash table size 34679, node heap has 0 buffer(s)
+Hash table size 34679, node heap has 0 buffer(s)
+Hash table size 34679, node heap has 0 buffer(s)
+Hash table size 34679, node heap has 0 buffer(s)
+0.00 hash searches/s, 0.00 non-hash searches/s
+---
+LOG
+---
+Log sequence number          54866720
+Log buffer assigned up to    54866720
+Log buffer completed up to   54866720
+Log written up to            54866720
+Log flushed up to            54866720
+Added dirty pages up to      54866720
+Pages flushed up to          54866720
+Last checkpoint at           54866720
+1172 log i/o's done, 0.00 log i/o's/second
+----------------------
+BUFFER POOL AND MEMORY
+----------------------
+Total large memory allocated 137428992
+Dictionary memory allocated 405206
+Buffer pool size   8192
+Free buffers       7006
+Database pages     1181
+Old database pages 455
+Modified db pages  0
+Pending reads      0
+Pending writes: LRU 0, flush list 0, single page 0
+Pages made young 0, not young 0
+0.00 youngs/s, 0.00 non-youngs/s
+Pages read 1035, created 146, written 1144
+0.00 reads/s, 0.00 creates/s, 0.00 writes/s
+No buffer pool page gets since the last printout
+Pages read ahead 0.00/s, evicted without access 0.00/s, Random read ahead 0.00/s
+LRU len: 1181, unzip_LRU len: 0
+I/O sum[0]:cur[0], unzip sum[0]:cur[0]
+--------------
+ROW OPERATIONS
+--------------
+0 queries inside InnoDB, 0 queries in queue
+0 read views open inside InnoDB
+Process ID=480, Main thread ID=140580791629568 , state=sleeping
+Number of rows inserted 217, updated 313, deleted 210, read 5001
+0.00 inserts/s, 0.00 updates/s, 0.00 deletes/s, 0.00 reads/s
+----------------------------
+END OF INNODB MONITOR OUTPUT
+============================
+
+1 row in set (0.00 sec)

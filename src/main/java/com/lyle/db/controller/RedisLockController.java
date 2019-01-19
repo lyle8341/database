@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @Slf4j
-public class TestController {
+public class RedisLockController {
 
   private int count = 100;
 
