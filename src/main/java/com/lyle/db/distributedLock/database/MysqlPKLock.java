@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
  * 基于mysql主键的锁
  * insert发生死锁：https://cloud.tencent.com/developer/article/1056372
  * https://www.cnblogs.com/olinux/p/5497176.html show engine innodb status
+ * https://zzyongx.github.io/blogs/mysql-acid-lock.html
  * @author Lyle
  * @version v1.0
  * @since 1.8

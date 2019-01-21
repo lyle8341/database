@@ -6,6 +6,7 @@
   set global log_queries_not_using_indexes=on;
   set global long_query_time=1;
   ```
+
 + 慢日志分析
   + mysqldumpslow
     ```bash
@@ -65,15 +66,78 @@
   + 选择合适的数据类型
     + 使用可以存下你的数据的最小数据类型
       + int存储日期，unix_timestamp,from_unixtime
+        + datetime类型"2019-01-21 13:16:44"(19字节)
       + bigint存储IP地址，inet_aton，inet_ntoa
     + 使用简单的数据类型，int要比varchar在mysql处理上简单
     + 尽可能的使用not null定义字段
     + 尽量少用text类型，非用不可时最好考虑分表
-      
-  
-  
-  
-  
+
++ 范式化是指数据库设计的规范，一般是指第三范式
+  + 要求表中不存在非关键字段对任意候选关键字段的传递函数依赖
++ 反范式
+  + 为了查询效率的考虑把原本符合第三范式的表适当冗余，以达到优化查询效率，以空间换取时间
+        
++ 垂直分表
+  + 把不常用的字段单独存放到一个表中
+  + 把大字段独立存放到一个表中
+  + 把经常一起使用的字段放到一起
+  + 原始表
+    ```sql
+    create table user(user_id int primary key,
+                   title varchar(255),
+                   description text,
+                   name varchar(2),
+                   age int 
+    );
+    ```
+  + 垂直拆分
+    ```sql
+    create table user(
+                   user_id int primary key,
+                   name varchar(2),
+                   age int 
+    );
+    create table user_text(
+                   user_id int primary key,
+                   title varchar(255),
+                   description text
+    );
+    ```    
++ 水平分表
+  + 比如对主键进行hash运算，mod(pk,n)
+  + 不同的hashId存到不同的表中
+    
++ 系统优化
+  + 操作系统
+    + /etc/sysctl.conf
+      + 增加tcp支持的队列数
+        ```properties
+        net.ipv4.tcp_max_syn_backlog=65535
+        ```
+      + 减少断开连接时，资源回收
+        ```properties
+        net.ipv4.tcp_max_tw_buckets=8000
+        net.ipv4.tcp_tw_reuse=1
+        net.ipv4.tcp_tw_recycle=1
+        net.ipv4.tcp_fin_timeout=10
+        ```
+    + /etc/security/limits.conf
+      + 打开文件数的限制
+        ```text
+        * soft nofile 65535
+        * hard nofile 65535
+        ```
+  + mysql系统本身
+    + mysql查找配置文件的顺序
+      ```bash
+      mysqld --verbose --help |grep -A 1 'Default options'
+      ```
+    + innodb_buffer_pool_size
+    + innodb_buffer_pool_instances
+    + 查询数据及索引大小
+      ```sql
+      select ENGINE,ROUND(sum(data_length+index_length)/1024/1024,1) as "Total MB" from information_schema.tables where table_schema not in("information_schema","performance_schema") group by ENGINE;
+      ```
   
   
   
