@@ -8,8 +8,6 @@
 
 ><a href="#variables">variables</a>  
 <a href="#not_null_default">not_null_default</a>  
-<a href="#three">three</a>  
-<a href="#rl&tl">行锁&表锁</a>
 
 <a name="variables">variables</a>
 + 查看mysql的datadir
@@ -18,10 +16,15 @@
 + mysql console清屏
   + mysql> system clear
 
-<a name="rl&tl">行锁&表锁</a>
-+ 表级锁:每次操作锁住整张表，开销小，加锁快;不会出现死锁，锁定粒度大，发生锁冲突概率最高，并发度最低；
-+ 行级锁:每次操作锁住一行数据，开销大，加锁慢；会出现死锁，锁定粒度小，发生锁冲突的概率最低，并发度也最高;
-+ 页面锁:开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于二者之间，并发度一般；
++ LENGTH()
+  + 检查字段实际占用的**字节**长度
+  + returns the length of the string measured in bytes. 
++ CHAR_LENGTH()
+  + 检查字段实际占用的**字符**长度
+  + returns the length of the string measured in characters.
+
+
+
 
 https://www.cnblogs.com/liujiacai/p/7753324.html
 
@@ -76,12 +79,12 @@ https://www.cnblogs.com/liujiacai/p/7753324.html
 
 ![not null default](/img/not-null-default.png)
 ```sql
-mysql> insert into lyle(sex)values('男');
-#ERROR 1364 (HY000): Field 'name' doesn't have a default value
-mysql> insert into lyle(name)values('gg');
-#Query OK, 1 row affected (0.29 sec)
-mysql> insert into lyle(name,sex)values('ggg',null);
-#ERROR 1048 (23000): Column 'sex' cannot be null
+insert into lyle(sex)values('男');
+# ERROR 1364 (HY000): Field 'name' doesn't have a default value
+insert into lyle(name)values('gg');
+# Query OK, 1 row affected (0.29 sec)
+insert into lyle(name,sex)values('ggg',null);
+# ERROR 1048 (23000): Column 'sex' cannot be null
 ```
 
 
