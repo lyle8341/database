@@ -1,4 +1,4 @@
-####SQL及索引优化
+#### SQL及索引优化
 + 如何发现有问题的sql
   ```sql
   set global slow_query_log=on;
