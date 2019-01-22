@@ -1,3 +1,4 @@
+#### engine
 * 查看当前是那个库
   1. mysql> select database(); 
   2. mysql> status;
