@@ -134,11 +134,18 @@
       ```
     + innodb_buffer_pool_size
     + innodb_buffer_pool_instances
+    + innodb_log_buffer_size
+    + innodb_flush_log_at_trx_commit
+    + innodb_read_io_threads
+    + innodb_write_io_threads
+    + innodb_file_per_table
+    + innodb_stats_on_metadata
     + 查询数据及索引大小
       ```sql
       select ENGINE,ROUND(sum(data_length+index_length)/1024/1024,1) as "Total MB" from information_schema.tables where table_schema not in("information_schema","performance_schema") group by ENGINE;
       ```
-  
++ cpu
+  + 一个sql的执行，复制进程只能用到一个cpu  
   
   
   
