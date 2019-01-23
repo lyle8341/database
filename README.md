@@ -23,7 +23,14 @@
   + 检查字段实际占用的**字符**长度
   + returns the length of the string measured in characters.
 
-
++ explain中的key_len计算
+  
+  |  field type  |      null    |                             formula                       |      
+  |:------------:|:------------:|:----------------------------------------------------------|
+  |  varchr(10)  |      yes     |10*(Character Set：utf8=3,gbk=2,latin1=1)+1(NULL)+2(变长字段)|
+  |  varchr(10)  |      no      |10*(Character Set：utf8=3,gbk=2,latin1=1)+2(变长字段)        |
+  |   char(10)   |      yes     |10*(Character Set：utf8=3,gbk=2,latin1=1)+1(NULL)          |
+  |   char(10)   |      no      |10*(Character Set：utf8=3,gbk=2,latin1=1)                  |
 
 
 https://www.cnblogs.com/liujiacai/p/7753324.html
