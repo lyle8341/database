@@ -42,14 +42,4 @@
   - 对于UPDATE、DELETE和INSERT语句，InnoDB会自动给涉及数据集加排他锁（X)；
   - 对于普通SELECT语句，InnoDB不会加任何锁；
   
-  
-[innodb下的记录锁，间隙锁，next-key锁](https://www.jianshu.com/p/bf862c37c4c9 "行锁")。  
-  
-  
-  
-[innodb下的记录锁，间隙锁，next-key锁][1]
-
-[1]: https://www.jianshu.com/p/bf862c37c4c9 "行锁"  
-  
-  
 
