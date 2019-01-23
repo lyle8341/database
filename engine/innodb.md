@@ -11,21 +11,45 @@
   - select for update获取的行锁会在当前事务结束时自动释放，因此必须在事务中使用
   - mysql中select for update语句执行中所有扫描过的行都会被锁上，这一点很容易造成问题。因此如果在mysql中用悲观锁务必要确定走了索引，而不是全表扫描。
 - InnoDB支持三种行锁定方式：
-  - 行锁（Record Lock）：行锁是通过给索引上的索引项加锁来实现的
+  - 记录锁（Record Lock）：行锁是通过给索引上的索引项加锁来实现的
     - 共享锁(S):
     - 排它锁(X):
   - 间隙锁（Gap Lock）：锁加在不存在的空闲空间，可以是两个索引记录之间，也可能是第一个索引记录之前或最后一个索引之后的空间。
-  - Next-Key Lock：行锁与间隙锁组合起来用就叫做Next-Key Lock。
-- 表锁  
+    - 对于键值在条件范围内但并不存在的记录，叫做“间隙（GAP)”，InnoDB也会对这个“间隙”加锁
+    - 间隙锁有一个致命的弱点，就是当锁定一个范围值之后，即使某些不存在的键值也会被无辜的锁定，而造成在锁定的时候无法插入值范围内的任何数据
+  - 临键锁（Next-Key Lock）：行锁与间隙锁组合起来用就叫做Next-Key Lock。
+    - 通过临建锁可以解决幻读的问题。 每个数据行上的**非唯一索引**列上都会存在一把临键锁，当某个事务持有该数据行的临键锁时，会锁住一段左开右闭区间的数据。需要强调的一点是，InnoDB 中行级锁是基于索引实现的，临键锁只与非唯一索引列有关，在唯一索引列（包括主键列）上不存在临键锁
+- 表锁 
+  - 为了让行级锁定和表级锁定共存，InnoDB也同样使用了意向锁（表级锁定）的概念 
   - 意向共享锁(IS):事务打算给数据行加行共享锁，事务在给一个数据行加共享锁前必须先取得该表的IS锁
   - 意向排它锁(IX):事务打算给数据行加行排他锁，事务在给一个数据行加排他锁前必须先取得该表的IX锁。
-
-- mysql给用户提供了加锁的机会
+- innodb使用表锁
+  ```sql
+  SET AUTOCOMMIT=0;
+  LOCK TABLES t1 WRITE, t2 READ, ...;
+  [do something with tables t1 and t2 here];
+  COMMIT;
+  UNLOCK TABLES;
+  ```
+  - 这种情况建议使用MyISAM引擎
+- 显式锁
   - 共享锁（S）：SELECT * FROM table_name WHERE ... LOCK IN SHARE MODE
   - 排他锁（X）：SELECT * FROM table_name WHERE ... FOR UPDATE
   - 自己加的锁没有释放锁的语句，所以锁会持有到事务结束。
+
+- 隐式锁
+  - InnoDB自动加意向锁。
+  - 对于UPDATE、DELETE和INSERT语句，InnoDB会自动给涉及数据集加排他锁（X)；
+  - 对于普通SELECT语句，InnoDB不会加任何锁；
+  
+  
+[innodb下的记录锁，间隙锁，next-key锁](https://www.jianshu.com/p/bf862c37c4c9 "行锁")。  
   
   
   
+[innodb下的记录锁，间隙锁，next-key锁][1]
+
+[1]: https://www.jianshu.com/p/bf862c37c4c9 "行锁"  
   
-http://blog.itpub.net/15498/viewspace-2141515/
+  
+
