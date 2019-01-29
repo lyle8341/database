@@ -113,7 +113,6 @@ public class MysqlPKLock {
       statement.setString(3, "");
       statement.setLong(4, System.currentTimeMillis());
       i = statement.executeUpdate();//如果成功，那么就是获取到了锁
-
       return i > 0;
     } catch (SQLException e) {
       e.printStackTrace();
@@ -132,6 +131,7 @@ public class MysqlPKLock {
 
   /**
    * 释放锁
+   * //TODO  没有关闭连接
    */
   private void unlock() {
     try {

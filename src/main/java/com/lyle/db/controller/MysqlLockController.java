@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *
  * @author Lyle
  * @version v1.0
  * @since 1.8
@@ -23,9 +22,9 @@ public class MysqlLockController {
   private int count = 100;
 
   @GetMapping("/pkLock")
-  public void mysqlPkLock(){
+  public void mysqlPkLock() {
     for (int i = 0; i < 100; i++) {
-      new Thread(()->{
+      new Thread(() -> {
         final Pair<Boolean, String> pair = MysqlLockViaPk.lockedWork(mysqlLockViaPk, () -> {
           //锁内程序
           return "我是锁内程序执行结果: " + count--;
@@ -38,4 +37,5 @@ public class MysqlLockController {
       }).start();
     }
   }
+
 }

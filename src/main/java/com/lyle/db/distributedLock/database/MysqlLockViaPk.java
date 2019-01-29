@@ -30,7 +30,6 @@ public class MysqlLockViaPk {
   private Connection getConn() {
     try {
       Connection conn = hikariDataSource.getConnection();
-      System.out.println("获取连接..." + conn.hashCode());
       return conn;
     } catch (SQLException e) {
       e.printStackTrace();
@@ -42,7 +41,7 @@ public class MysqlLockViaPk {
   /**
    * 获取锁
    */
-  public boolean lock() {
+  private boolean lock() {
     String sql = "insert ignore into mysql_pk_lock(id,count,thread_name,locked_time) VALUES (?,?,?,?)";
     while (true) {
       if (insertLock(sql)) {
@@ -58,26 +57,20 @@ public class MysqlLockViaPk {
 
   private boolean insertLock(String sql) {
     Connection connection = getConn();
+    PreparedStatement statement = null;
     try {
-      PreparedStatement statement = connection.prepareStatement(sql);
+      statement = connection.prepareStatement(sql);
       statement.setString(1, LOCK_ID);
       statement.setInt(2, 1);
       statement.setString(3, "");
       statement.setLong(4, System.currentTimeMillis());
       final int i = statement.executeUpdate();
-      System.out.println("=====插入记录数：======>" + i);
       return i > 0;//如果成功，那么就是获取到了锁
     } catch (SQLException e) {
       e.printStackTrace();
       return false;
     }finally {
-      if(null != connection){
-        try {
-          connection.close();
-        } catch (SQLException e) {
-          e.printStackTrace();
-        }
-      }
+      close(statement, connection);
     }
   }
 
@@ -85,13 +78,34 @@ public class MysqlLockViaPk {
    * 释放锁
    */
   private void unlock() {
+    PreparedStatement statement = null;
+    final Connection conn = getConn();
     try {
       String sql = "DELETE  from mysql_pk_lock where id = ?";
-      PreparedStatement statement = getConn().prepareStatement(sql);
+      statement = conn.prepareStatement(sql);
       statement.setString(1, LOCK_ID);
       statement.executeUpdate();
     } catch (SQLException e) {
       e.printStackTrace();
+    }finally {
+      close(statement, conn);
+    }
+  }
+
+  private void close(PreparedStatement statement, Connection conn) {
+    if (null != conn) {
+      try {
+        conn.close();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+    if (null != statement) {
+      try {
+        statement.close();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
     }
   }
 
