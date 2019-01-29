@@ -36,7 +36,7 @@ RECORD LOCKS space id 452 page no 4 n bits 72 index PRIMARY of table `databases`
 Record lock, heap no 1 PHYSICAL RECORD: n_fields 1; compact format; info bits 0
  0: len 8; hex 73757072656d756d; asc supremum;;
 ===============
-// 以上表示死锁发生时事务1等待的锁，事务想获得mysql_pk_lock表的PRIMARY索引对应的X排他锁(Innodb的锁是与索引相关)
+等待：IX
 ===============
 
 *** (2) TRANSACTION:
@@ -54,7 +54,9 @@ Record lock, heap no 1 PHYSICAL RECORD: n_fields 1; compact format; info bits 0
 RECORD LOCKS space id 452 page no 4 n bits 72 index PRIMARY of table `databases`.`mysql_pk_lock` trx id 112398 lock_mode X insert intention waiting
 Record lock, heap no 1 PHYSICAL RECORD: n_fields 1; compact format; info bits 0
  0: len 8; hex 73757072656d756d; asc supremum;;
-
+==========================
+持有：s  等待：IX
+==========================
 *** WE ROLL BACK TRANSACTION (2)
 ------------
 TRANSACTIONS
