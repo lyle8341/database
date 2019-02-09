@@ -16,6 +16,7 @@
 <a href="#start_trx">开启事务</a>  
 <a href="#db_inst">数据库和实例</a>  
 <a href="#tx_isolation">查看事务隔离级别</a>  
+<a href="#optimize_mysql">如何优化mysql</a>  
 
 >select CONNECTION_ID();
 
@@ -170,8 +171,20 @@ set session transaction isolation level read uncommitted;
 set session transaction isolation level repeatable read;
 ```
 
-
-
+><a name="optimize_mysql">如何优化mysql</a>
+1. 数据库设计要合理(3F)
+   + 1F 原子约束（每列不可再分），是否保证原子（看业务）
+   + 2F 要求表中的所有列，都必须依赖于主键，而不能有任何一列与主键没有关系，也就是说*一个表只描述一件事情*
+   + 3F 表中的每一列只与主键直接相关而不是间接相关，（表中的每一列只能依赖于主键），不要有冗余数据
+   
+2. 添加索引
+3. 分表分库
+4. 读写分离
+5. 存储过程
+6. 配置最大连接数
+7. mysql服务器升级
+8. 清理碎片化
+9. sql语句优化
 
 
 

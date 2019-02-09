@@ -1,6 +1,7 @@
 #### 实践
 
 >select * from performance_schema.data_locks;
+>> LOCK_DATA: 0x000000000203 表示其对应的6字节的rowid的位置指针
 
 1 . 搜索时无法使用索引，即全表扫描时，InnoDB在表的全部行上都加锁
   + RR
