@@ -42,6 +42,7 @@
     ```
   + 子查询
     + 优化为join，需要注意关联表是否一对多，有重复数据
+    + 使用join，mysql不需要在内存中创建临时表
   + group by
     + [原始]explain select actor.first_name,actor.last_name,count(*) from sakila.film_actor inner join sakila.actor using(actor_id) group by film_actor.actor_id;
     + [优化]explain select actor.first_name,actor.last_name,c.cnt from sakila.actor inner join (select actor_id count(*) as cnt from sakila.film_actor group by actor_id) as c using(actor_id);
@@ -71,6 +72,21 @@
     + 使用简单的数据类型，int要比varchar在mysql处理上简单
     + 尽可能的使用not null定义字段
     + 尽量少用text类型，非用不可时最好考虑分表
+
++ 模糊查询(where 索引字段 like '%xx%')使用索引效果
+  + like '%xx%'全表扫描
+  + like 'xx%'会使用索引
+  + like '%xx'不会使用索引
+  + or条件都加上索引才会使用索引
+  + 判断null，用is null会使用索引，=null不会使用索引
+  + group by 不会使用索引，全表扫描
+  + 提高分组效率，使用order by null，因为默认分组后还会排序
+  + 不要使用>=，使用>
+  + in/not in 不使用索引
+  + 能用between就不要用in
+  + 
+
+
 
 + 范式化是指数据库设计的规范，一般是指第三范式
   + 要求表中不存在非关键字段对任意候选关键字段的传递函数依赖
