@@ -4,7 +4,9 @@ import java.util.Map;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
 
+@ActiveProfiles("multiDSHikari")
 public class MultiDataSourceTests extends BaseTest{
 
   @Autowired
