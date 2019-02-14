@@ -1,12 +1,7 @@
 package com.lyle.config;
 
 import com.zaxxer.hikari.HikariDataSource;
-import javax.sql.DataSource;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -20,21 +15,18 @@ import org.springframework.jdbc.core.JdbcTemplate;
  * @since 1.8  
  */
 @Configuration
-public class PrimaryDataSourceConfig extends DataSourceAutoConfiguration {
+public class PrimaryDataSourceConfig{
 
-  @Bean(name = "dataSourceFirst")
+  @Bean(name = "primaryDataSource")
   @Primary
-  @ConfigurationProperties(prefix = "spring.datasource")
-  public DataSource dataSourceFirst(DataSourceProperties properties) {
-    return DataSourceBuilder.create(properties.getClassLoader()).type(HikariDataSource.class)
-        .driverClassName(properties.determineDriverClassName())
-        .url(properties.determineUrl()).username(properties.determineUsername())
-        .password(properties.determinePassword()).build();
+  @ConfigurationProperties(prefix = "hikari.primary")
+  public HikariDataSource dataSource() {
+    return new HikariDataSource();
   }
 
-  @Bean(name = "jdbcTemplateFirst")
+  @Bean(name = "primaryJdbcTemplate")
   @Primary
-  public JdbcTemplate jdbcTemplateFirst(@Qualifier("dataSourceFirst") DataSource dataSource) {
-    return new JdbcTemplate(dataSource);
+  public JdbcTemplate jdbcTemplate() {
+    return new JdbcTemplate(this.dataSource());
   }
 }
