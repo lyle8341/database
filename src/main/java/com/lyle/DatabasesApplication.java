@@ -1,4 +1,4 @@
-package com.lyle.db;
+package com.lyle;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
