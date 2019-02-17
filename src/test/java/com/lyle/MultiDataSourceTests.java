@@ -1,23 +1,25 @@
 package com.lyle;
 
 import java.util.Map;
+import javax.annotation.Resource;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 /**
- * 必须使用@Qualifier指定
+ * <b>@Resource === @Autowired @Qualifier("beanName")</b>
  */
 @ActiveProfiles("multiDSHikari")
 public class MultiDataSourceTests extends BaseTest{
 
-  @Autowired
-//  @Qualifier("primaryJdbcTemplate")
+  @Resource
+  /*@Autowired
+  @Qualifier("primaryJdbcTemplate")*/
   private JdbcTemplate primaryJdbcTemplate;
 
-  @Autowired
-//  @Qualifier("secondJdbcTemplate")
+  @Resource
+  /*@Autowired
+  @Qualifier("secondJdbcTemplate")*/
   private JdbcTemplate secondJdbcTemplate;
 
   @Test
