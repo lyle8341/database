@@ -13,7 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
  * @since 1.8
  */
 @Configuration
-//@AutoConfigureAfter({DataSourceAutoConfiguration.class})
+//@AutoConfigureAfter({DataSourceAutoConfiguration.class}) //貌似没什么用
 public class SecondaryDataSourceConfig{
 
   @Bean(name = "secondDataSource")
