@@ -12,6 +12,15 @@ buildscript {
     }
 }
 
+/**
+ * <b>plugin-1</b>
+ * only buildscript {} and other plugins {} script blocks are allowed before plugins {} blocks,
+ * no other statements are allowed
+ */
+plugins {
+    id 'net.ltgt.apt' version '0.10'
+}
+
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
@@ -38,8 +47,44 @@ dependencies {
     implementation('com.alibaba:druid-spring-boot-starter:1.1.9')
     implementation('org.springframework.boot:spring-boot-starter-jta-atomikos')
     runtimeOnly('mysql:mysql-connector-java')
-    compileOnly('org.projectlombok:lombok')
     implementation('org.springframework.boot:spring-boot-starter-data-redis')
     implementation('org.apache.commons:commons-pool2')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
+
+
+    /**
+     * <b>lombok</b>
+     * compileOnly('org.projectlombok:lombok') 弃用
+     */
+    //方式1:(推荐)
+//    compileOnly 'org.projectlombok:lombok'
+//    annotationProcessor 'org.projectlombok:lombok'
+//    testCompileOnly 'org.projectlombok:lombok'
+//    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    /**
+     * 方式2:
+     * 2-0.maven { url "https://plugins.gradle.org/m2/" }
+     * 2-1.引入插件 buildscript-->dependencies-->classpath "net.ltgt.gradle:gradle-apt-plugin:0.10"
+     * 2-2.apply plugin: "net.ltgt.apt"
+     * 2-3.compileOnly "org.projectlombok:lombok"
+     *     apt "org.projectlombok:lombok"
+     *     testCompileOnly "org.projectlombok:lombok"
+     *     testApt "org.projectlombok:lombok"
+     */
+    /**
+     * 方式3:
+     * 3-0.引入插件
+             plugins {
+                id 'net.ltgt.apt' version '0.10'
+             }
+     * 3-1.compileOnly "org.projectlombok:lombok"
+     *     apt "org.projectlombok:lombok"
+     *     testCompileOnly "org.projectlombok:lombok"
+     *     testApt "org.projectlombok:lombok"
+     */
+    compileOnly "org.projectlombok:lombok"
+    apt "org.projectlombok:lombok"
+    testCompileOnly "org.projectlombok:lombok"
+    testApt "org.projectlombok:lombok"
 }
