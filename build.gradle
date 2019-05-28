@@ -54,6 +54,7 @@ dependencies {
 
     /**
      * <b>lombok</b>
+     * 方式0:
      * compileOnly('org.projectlombok:lombok') 弃用
      */
     //方式1:(推荐)
